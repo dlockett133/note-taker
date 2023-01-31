@@ -34,10 +34,6 @@ app.post(`/api/notes/`, (req, res) => {
             text,
             noteID: uuid()
         }
-        const response = {
-            status: `success`,
-            body: newNote
-        }
     
     fs.readFile("./db/db.json", `utf-8`, (err, data) => {
         if (err) {
@@ -46,11 +42,22 @@ app.post(`/api/notes/`, (req, res) => {
             const parsedNotes = JSON.parse(data)
             parsedNotes.push(newNote);
 
-            console.log(parsedNotes);
+            fs.writeFile("./db/db.json", JSON.stringify(parsedNotes, null, 4), (err) => {
+                err ? console.log(err) : console.log(`New note entry is saved!`);  
+            })
         }
     })
+
+    const response = {
+        status: `success`,
+        body: newNote
+    };
+
         res.status(201).json(response)
-        console.log(`${response} is now logged =)`)
+        console.log(response)
+
+        // refresh the page after the API has been updated
+        window.location.reload()
 
     } else {
         res.status(500).json(`error in posting note`)

@@ -230,4 +230,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+/db
+db.json
+
 # End of https://www.toptal.com/developers/gitignore/api/node,windows,macos,linux,react
