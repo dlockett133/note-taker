@@ -1,6 +1,7 @@
 const express = require("express");
 // const api = require(`./routes/index.js`)
-const notes = require(`./db/db.json`)
+const notes = require(`./db/db.json`);
+const uuid = require("./helpers/uuid");
 const app = express()
 
 // Middleware for parsing JSON and urlencoded form data
@@ -28,6 +29,11 @@ app.get(`/api/notes/`, (req,res) => {
 
 app.post(`/api/notes/`, (req, res) => {
     console.log(`${req.method} is now logged =)`)
+    console.log(`${req.body} is now logged =)`)
+
+    const {title, text} =  req.body;
+
+
 })
 
 app.listen(PORT, () =>{
