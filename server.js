@@ -58,7 +58,7 @@ app.post(`/api/notes`, (req, res) => {
             noteID: uuid()
         }
     
-        // readAndAppend(newNote, './db/db.json')
+        readAndAppend(newNote, './db/db.json')
 
     const response = {
         status: `success`,
