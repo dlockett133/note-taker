@@ -23,6 +23,12 @@ app.get(`/notes/`, (req,res) => {
 // Promise version of fs.readFile
 const readFromFile = util.promisify(fs.readFile);
 
+// Function to write data to the JSON file given a destination and some content
+const writeToFile = (destination, content) =>
+  fs.writeFile(destination, JSON.stringify(content, null, 4), (err) =>
+    err ? console.error(err) : console.info(`\nData written to ${destination}`)
+  );
+
 
 // Route for a GET request that will return JSON
 app.get(`/api/notes`, (req,res) => {
