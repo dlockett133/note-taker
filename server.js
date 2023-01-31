@@ -1,5 +1,6 @@
 const express = require("express");
-const fs = require("fs")
+const fs = require("fs");
+const util = require("util");
 // const api = require(`./routes/index.js`)
 const notes = require(`./db/db.json`);
 const uuid = require("./helpers/uuid");
@@ -19,12 +20,16 @@ app.get(`/notes/`, (req,res) => {
     res.status(200).sendFile(`${__dirname}/public/notes.html`);
 })
 
+// Promise version of fs.readFile
+const readFromFile = util.promisify(fs.readFile);
+
+
 // Route for a GET request that will return JSON
-app.get(`/api/notes/`, (req,res) => {
-    res.status(200).json(notes);
+app.get(`/api/notes`, (req,res) => {
+    readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
 })
 
-app.post(`/api/notes/`, (req, res) => {
+app.post(`/api/notes`, (req, res) => {
     console.log(`${req.method} is now logged =)`)
     const {title, text} =  req.body;
 
@@ -35,18 +40,7 @@ app.post(`/api/notes/`, (req, res) => {
             noteID: uuid()
         }
     
-    fs.readFile("./db/db.json", `utf-8`, (err, data) => {
-        if (err) {
-            console.log(err)
-        } else {
-            const parsedNotes = JSON.parse(data)
-            parsedNotes.push(newNote);
-
-            fs.writeFile("./db/db.json", JSON.stringify(parsedNotes, null, 4), (err) => {
-                err ? console.log(err) : console.log(`New note entry is saved!`);  
-            })
-        }
-    })
+        // readAndAppend(newNote, './db/db.json')
 
     const response = {
         status: `success`,
@@ -55,9 +49,6 @@ app.post(`/api/notes/`, (req, res) => {
 
         res.status(201).json(response)
         console.log(response)
-
-        // refresh the page after the API has been updated
-        window.location.reload()
 
     } else {
         res.status(500).json(`error in posting note`)
