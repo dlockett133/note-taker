@@ -26,6 +26,9 @@ app.get(`/api/notes/`, (req,res) => {
     res.status(200).json(notes);
 })
 
+app.post(`/api/notes/`, (req, res) => {
+    console.log(`${req.method} is now logged =)`)
+})
 
 app.listen(PORT, () =>{
     console.log(`Serving static asset routes at http://localhost:${PORT}`)
