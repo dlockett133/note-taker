@@ -44,7 +44,9 @@ app.post(`/api/notes/`, (req, res) => {
             console.log(err)
         } else {
             const parsedNotes = JSON.parse(data)
+            parsedNotes.push(newNote);
 
+            console.log(parsedNotes);
         }
     })
         res.status(201).json(response)
