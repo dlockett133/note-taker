@@ -233,4 +233,6 @@ $RECYCLE.BIN/
 /db
 db.json
 
+/Assets/README.md
+
 # End of https://www.toptal.com/developers/gitignore/api/node,windows,macos,linux,react
