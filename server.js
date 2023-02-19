@@ -56,7 +56,7 @@ app.post(`/api/notes`, (req, res) => {
         const newNote = {
             title,
             text,
-            noteId: uuid()
+            id: uuid()
         }
     
         readAndAppend(newNote, './db/db.json')
@@ -76,7 +76,7 @@ app.post(`/api/notes`, (req, res) => {
 })
 
 app.delete('/api/notes/:id',(req,res) => {
-  const {id} = req.params;
+  const {noteId} = req.params;
 
   fs.readFile('./db/db.json', 'utf8', (err, data) => {
     const notes = JSON.parse(data);
@@ -84,10 +84,10 @@ app.delete('/api/notes/:id',(req,res) => {
       console.log(err);
       return
     }
-    const foundNote = notes.find(({noteId}) => noteId === id)
+    const foundNote = notes.find(({id}) => id === noteId)
     console.log(foundNote)
-    const noteIndex = notes.indexOf({noteId: id});
-    const removedNote = notes.splice([noteIndex])
+    const noteIndex = notes.indexOf({id: noteId});
+    const removedNote = notes.splice([noteIndex]);
     const updatedNotes = notes
 
     writeToFile('./db/db.json', updatedNotes);
