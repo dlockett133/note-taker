@@ -75,6 +75,7 @@ app.post(`/api/notes`, (req, res) => {
 
 })
 
+// Route for a DELETE request that will delete notes from db
 app.delete('/api/notes/:id',(req,res) => {
   const {noteId} = req.params;
 
