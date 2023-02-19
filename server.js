@@ -1,3 +1,4 @@
+const { response } = require("express");
 const express = require("express");
 const fs = require("fs");
 const util = require("util");
@@ -55,7 +56,7 @@ app.post(`/api/notes`, (req, res) => {
         const newNote = {
             title,
             text,
-            noteID: uuid()
+            noteId: uuid()
         }
     
         readAndAppend(newNote, './db/db.json')
@@ -72,6 +73,27 @@ app.post(`/api/notes`, (req, res) => {
         res.status(500).json(`error in posting note`)
     }
 
+})
+
+app.delete('/api/notes/:id',(req,res) => {
+  const {id} = req.params;
+
+  fs.readFile('./db/db.json', 'utf8', (err, data) => {
+    const notes = JSON.parse(data);
+    if (err) {
+      console.log(err);
+      return
+    }
+    const foundNote = notes.find(({noteId}) => noteId === id)
+    console.log(foundNote)
+    const noteIndex = notes.indexOf({noteId: id});
+    const removedNote = notes.splice([noteIndex])
+    const updatedNotes = notes
+
+    writeToFile('./db/db.json', updatedNotes);
+  })
+
+  res.sendStatus(200)
 })
 
 // Route for a GET request that will return homepage (index.html)
