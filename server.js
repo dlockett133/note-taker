@@ -44,7 +44,7 @@ const readAndAppend = (content, file) => {
 };
 
 // Route for a GET request that will return JSON
-app.get(`/api/notes`, (req,res) => {
+app.get(`/api/notes`,(req,res) => {
     readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
 })
 
@@ -77,7 +77,7 @@ app.post(`/api/notes`, (req, res) => {
 
 // Route for a DELETE request that will delete notes from db
 app.delete('/api/notes/:id',(req,res) => {
-  const {noteId} = req.params;
+  const {id: noteId} = req.params;
 
   fs.readFile('./db/db.json', 'utf8', (err, data) => {
     const notes = JSON.parse(data);
@@ -85,12 +85,13 @@ app.delete('/api/notes/:id',(req,res) => {
       console.log(err);
       return
     }
-    const foundNote = notes.find(({id}) => id === noteId)
-    console.log(foundNote)
-    const noteIndex = notes.indexOf({id: noteId});
-    const removedNote = notes.splice([noteIndex]);
-    const updatedNotes = notes
-
+    const foundNoteIndex = notes.findIndex(({id}) => id === noteId)
+    if (foundNoteIndex === -1) {
+      console.log(`Note with id ${noteId} not found`);
+      return;
+    }
+    const removeddNote = notes.splice(foundNoteIndex,1);
+    const updatedNotes = notes;
     writeToFile('./db/db.json', updatedNotes);
   })
 
